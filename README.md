@@ -93,6 +93,28 @@ pnpm run dev
 
 Open the URL generated in your console. Once you grant permission to the app, you can start development.
 
+### Stripe exchange payments
+
+The return exchange flow uses Stripe Checkout only when the replacement costs
+more than the returned items. Configure these values in the backend `.env`:
+
+```dotenv
+STRIPE_SECRET_KEY=sk_test_replace_me
+STRIPE_WEBHOOK_SECRET=whsec_replace_me
+```
+
+Add the matching publishable key to the dashboard `.env`:
+
+```dotenv
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_replace_me
+```
+
+For sandbox testing, both values must come from the same Stripe sandbox. Point
+the Stripe webhook endpoint at `https://YOUR_BACKEND_HOST/v1/webhooks/stripe`
+and subscribe it to `checkout.session.completed`,
+`checkout.session.async_payment_succeeded`, and `checkout.session.expired`.
+Never commit or expose either secret.
+
 ## Deployment
 
 ### Application Storage

@@ -7,7 +7,7 @@ const {
 } = require("../utils/merchantTimezone");
 
 const Merchant = {};
-const ALLOWED_BILLING_TYPES = new Set(["stripe", "shopify", "manual"]);
+const ALLOWED_BILLING_TYPES = new Set(["stripe", "shopify"]);
 
 const normalizeBillingType = (value) => {
     if (empty(value)) return undefined;

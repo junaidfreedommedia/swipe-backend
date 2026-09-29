@@ -1,4 +1,8 @@
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
+const {
+    S3Client,
+    PutObjectCommand,
+    DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
 const AWS_CREDENTIALS = Config.get("AWS_CREDENTIALS");
 const mime = require("mime-types");
 
@@ -37,5 +41,32 @@ module.exports = {
             console.error("Error uploading export file to S3:", err);
             throw err;
         }
+    },
+    uploadImage: async (fileName, content, environment = "dev", contentType = "image/jpeg") => {
+        const key = `${environment}/images/${fileName}`;
+
+        await s3.send(
+            new PutObjectCommand({
+                Bucket: "swipe-images-storage",
+                Key: key,
+                Body: content,
+                ContentType: contentType,
+                ContentDisposition: "inline",
+            })
+        );
+
+        return {
+            Location: `https://swipe-images-storage.s3.${AWS_CREDENTIALS.AWS_REGION}.amazonaws.com/${key}`,
+            Key: key,
+        };
+    },
+    deleteFile: async (key) => {
+        if (!key) return;
+        await s3.send(
+            new DeleteObjectCommand({
+                Bucket: "swipe-images-storage",
+                Key: key,
+            })
+        );
     },
 };

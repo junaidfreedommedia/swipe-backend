@@ -37,11 +37,6 @@ const MerchantBillingControl = async (req, res, next) => {
             throwError("Invalid billing payload");
         }
 
-        const merchant = await Services.Merchant.get({ _id: req.params.id });
-        if (merchant?.billing_controls?.version && ('billing_type' in payload || 'is_billing' in payload)) {
-            throwError('Use Finance > Billing Controls for this merchant.', 409);
-        }
-
         await Services.Merchant.updateOne(
             { _id: req.params.id },
             { $set: payload }
@@ -64,6 +59,6 @@ router.post(
     Auth.check,
     SendBilling
 );
-router.post("/merchant-billing/:id", Auth.check, Auth.requireSuperAdmin, MerchantBillingControl);
+router.post("/merchant-billing/:id", Auth.check, MerchantBillingControl);
 
 module.exports = router;

@@ -160,6 +160,22 @@ async function sendNotification(options) {
             template = template.replace('[TOTAL_AMOUNT]', options.total_amount || '$0.00');
             template = template.replace('[CURRENT_YEAR]', new Date().getFullYear());
             break;
+        case ('RETURN_PAYMENT_CUSTOMER'):
+        case ('RETURN_REORDER_CUSTOMER'):
+        case ('RETURN_REFUND_CUSTOMER'):
+        case ('RETURN_APPROVED_CUSTOMER'):
+        case ('RETURN_DECLINED_CUSTOMER'):
+        case ('RETURN_FILED_CUSTOMER'):
+            template = loadTemplate('return_customer.html');
+            template = template.replace('[HEADLINE]', options.headline || 'Return Update');
+            template = template.replace('[STORE_NAME]', options.store_name || 'Store');
+            template = template.replace('[CUSTOMER_NAME]', options.customer_name || 'Customer');
+            template = template.replace('[MESSAGE]', options.message || 'There is an update to your return.');
+            template = template.replace('[DETAILS_HTML]', options.details_html || '');
+            template = template.replace('[ACTION_HTML]', options.action_html || '');
+            template = template.replace('[FOOTER_MESSAGE]', options.footer_message || 'Thanks for trusting Swipe. If you need anything else, our team is here to help.');
+            template = template.replace('[CURRENT_YEAR]', new Date().getFullYear());
+            break;
         case ('BILLING_REQUEST'):
             template = Fs.readFileSync('./lib/billing_request.html', { encoding: 'utf-8' });
             template = template.split('[BILLING_APPROVAL_LINK]').join(options.billing_approval_link);

@@ -27,10 +27,18 @@ console.log("Api",api);
 
 const env = process.env.NODE_ENV || "staging";
 if (["production", "staging", "develop"].includes(env)) {
+  const configuredScopes = JSON.parse(process.env.SCOPE || "[]");
+  const requiredReturnScopes = [
+    "read_returns",
+    "write_returns",
+    "read_locations",
+    "write_gift_cards",
+    "write_customers",
+  ];
   Object.assign(api, {
     apiKey:       process.env.SHOPIFY_API_KEY,
     apiSecretKey: process.env.SHOPIFY_CLIENT_SECRET,
-    scopes:       JSON.parse(process.env.SCOPE),
+    scopes:       [...new Set([...configuredScopes, ...requiredReturnScopes])],
     hostScheme:   process.env.HOST_SCHEME,
     hostName:     process.env.HOST,
   });

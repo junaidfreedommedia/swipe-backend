@@ -51,7 +51,11 @@ const OrderCreateWebhook = async (req, res, next) => {
         const { shop, order } = req.body;
         const isExists = await Services.Order.get({ id: order }, { _id: 1 });
         if (isExists) return res.send({ message: "Order already exists" });
-        const session = await Services.ShopifySession.get({ shop });
+        const session = await Models.ShopifySession.getShopifySession(
+            shop,
+            "offline"
+        );
+        if (!session) throwError(MSG.SHOPIFY_SESSION_NOT_FOUND);
         const orderData = await shopify.api.rest.Order.find({
             session: session,
             id: order,

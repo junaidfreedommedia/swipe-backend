@@ -116,6 +116,18 @@ const orderDetails = async (req, res, next) => {
     );
     responseData.events = events;
 
+    const filedReturn = await Services.Return.get(
+      { order: orderDetail._id, merchant: orderDetail.merchant },
+      { _id: 1, return_number: 1, status: 1 }
+    );
+    responseData.return_filed = filedReturn
+      ? {
+          id: filedReturn._id,
+          return_number: filedReturn.return_number,
+          status: filedReturn.status,
+        }
+      : null;
+
     responseData.comments = Array.isArray(responseData.comments) ? responseData.comments : [];
     responseData.internal_comments = Array.isArray(responseData.internal_comments) ? responseData.internal_comments : [];
 

@@ -32,11 +32,10 @@ query appSubscription {
 }`;
 
 const CREATE_USAGE_RECORD = `
-mutation appUsageRecordCreate($subscriptionLineItemId: ID!, $amount: Decimal!, $description: String!, $idempotencyKey: String){
+mutation appUsageRecordCreate($subscriptionLineItemId: ID!, $amount: Decimal!, $description: String!){
     appUsageRecordCreate(
         subscriptionLineItemId: $subscriptionLineItemId,
         description: $description,
-        idempotencyKey: $idempotencyKey,
         price: { amount: $amount, currencyCode: USD }
     ) {
         userErrors {
@@ -49,11 +48,11 @@ mutation appUsageRecordCreate($subscriptionLineItemId: ID!, $amount: Decimal!, $
     }
 }`;
 
-const createShopifyUsageCharge = async ({ session, amount, description, subscriptionLineItemId, idempotencyKey }) => {
+const createShopifyUsageCharge = async ({ session, amount, description }) => {
     const chargeAmount = Number(amount || 0);
     const chargeDescription = description || BILLING_CONFIG[PLAN].usageTerms;
     const client = new shopify.api.clients.Graphql({ session });
-    const subscriptionLineItem = subscriptionLineItemId ? { id: subscriptionLineItemId } : await getAppSubscription(session);
+    const subscriptionLineItem = await getAppSubscription(session);
 
     if (!subscriptionLineItem?.id) {
         throwError(
@@ -66,7 +65,7 @@ const createShopifyUsageCharge = async ({ session, amount, description, subscrip
     const cappedAmount = Number(subscriptionLineItem.cappedAmount) || 0;
     const totalAmountUsed = balanceUsed + chargeAmount;
 
-    if (!subscriptionLineItemId && totalAmountUsed > cappedAmount) {
+    if (totalAmountUsed > cappedAmount) {
         return {
             capacityReached: true,
             balanceUsed,
@@ -79,16 +78,12 @@ const createShopifyUsageCharge = async ({ session, amount, description, subscrip
             amount: chargeAmount,
             subscriptionLineItemId: subscriptionLineItem.id,
             description: chargeDescription,
-            ...(idempotencyKey ? { idempotencyKey } : {}),
         },
     });
 
     const userErrors = response?.data?.appUsageRecordCreate?.userErrors || [];
     if (userErrors.length) {
         throwError(userErrors.map((entry) => entry.message).join(", "));
-    }
-    if (!response?.data?.appUsageRecordCreate?.appUsageRecord?.id) {
-        throwError('Shopify did not confirm the usage charge. Retry this same bill.');
     }
 
     return {
@@ -187,12 +182,12 @@ Billing.checkBillingStatus = async (session, options = {}) => {
     }
 }
 
-Billing.sendBillingRequest = async (shop_id, { sendEmail = true } = {}) => {
+Billing.sendBillingRequest = async (shop_id) => {
     try {
         const session = await Services.ShopifySession.get({ shop: shop_id });
         if (!session) throwError(MSG.MERCHANT_NOT_EXIST);
         const plans = Object.keys(Config.get('BILLING_CONFIG'));
-        const billingStatus = await Billing.checkBillingStatus(session, { throwOnError: !sendEmail });
+        const billingStatus = await Billing.checkBillingStatus(session);
         if (billingStatus) return { message: 'Billing Already Approved', alreadyApproved: true };
         const merchant = await Services.Merchant.get({ shop_id });
         const billingResponse = await shopify.api.billing.request({
@@ -200,8 +195,7 @@ Billing.sendBillingRequest = async (shop_id, { sendEmail = true } = {}) => {
             plan: plans[0],
             isTest: Config.get('IS_TEST_BILLING'),
         });
-        if (!sendEmail && empty(billingResponse)) throwError('Shopify did not return an approval link. Please retry.');
-        if (sendEmail && !empty(billingResponse)) {
+        if (!empty(billingResponse)) {
             await Notifications.sendNotification({
                 subject: `Billing Approval Request From Swipe`,
                 to: [merchant.customer_email],
@@ -210,27 +204,11 @@ Billing.sendBillingRequest = async (shop_id, { sendEmail = true } = {}) => {
                 merchant_name: merchant.name
             });
         }
-        return { url: billingResponse, message: sendEmail ? `Shopify billing request has been sent on ${merchant.customer_email}` : 'Shopify approval link created.' };
+        return { url: billingResponse, message: `Shopify billing request has been sent on ${merchant.customer_email}` };
     } catch (error) {
         throwError(error);
     }
 }
-
-// Finance holds the merchant lock and freezes this line item before submitting a charge.
-Billing.prepareMerchantShopifyCharge = async (shop) => {
-    const session = await Services.ShopifySession.get({ shop });
-    if (!session) throwError('Connect this store to Shopify first.');
-    if (!await Billing.checkBillingStatus(session, { throwOnError: true })) throwError(MSG.BILLING_NOT_APPROVED);
-    return getAppSubscription(session);
-};
-
-Billing.chargeMerchantShopifyBill = async ({ shop, amount, description, subscriptionLineItemId, idempotencyKey }) => {
-    if (!subscriptionLineItemId || !idempotencyKey || !(amount > 0)) throwError('Invalid Shopify bill.');
-    const session = await Services.ShopifySession.get({ shop });
-    if (!session) throwError('Connect this store to Shopify first.');
-    // Let Shopify enforce the cap, including on retries of an already accepted request.
-    return createShopifyUsageCharge({ session, amount, description, subscriptionLineItemId, idempotencyKey });
-};
 
 Billing.createUsageRecord = async (recordInfo) => {
     let {
@@ -256,14 +234,13 @@ Billing.createUsageRecord = async (recordInfo) => {
 
         if (!merchant || !shop || !amount || !billing_type) return res;
         if (billing_type == 'shopify' && charge_shopify_now) {
-            // Maintenance/replayed order requests can carry an old provider value.
-            // Re-read it under the same lock used for Finance billing migration.
-            const chargeResponse = await Services.MerchantBilling.withLock(merchant, async current => {
-                if (current.billing_controls?.version || current.billing_type !== 'shopify') return {};
-                const session = await Services.ShopifySession.get({ shop });
-                const hasPayment = await Billing.checkBillingStatus(session);
-                if (!hasPayment) throwError(MSG.BILLING_NOT_APPROVED);
-                return createShopifyUsageCharge({ session, amount, description: metadata?.description });
+            const session = await Services.ShopifySession.get({ shop });
+            const hasPayment = await Billing.checkBillingStatus(session);
+            if (!hasPayment) throwError(MSG.BILLING_NOT_APPROVED);
+            const chargeResponse = await createShopifyUsageCharge({
+                session,
+                amount,
+                description: metadata?.description,
             });
             if (chargeResponse.capacityReached) {
                 return { ...res, capacityReached: true };
@@ -387,7 +364,7 @@ Billing.appCreditCreate = async (shop_id, amount, description) => {
     }
 }
 
-const chargeLegacyStatementOnShopify = async ({
+Billing.chargeStatementOnShopify = async ({
     shop,
     statementId,
     statementMonth,
@@ -480,18 +457,6 @@ const chargeLegacyStatementOnShopify = async ({
         throwError(error);
     }
 }
-
-Billing.chargeStatementOnShopify = async (params) => {
-    const merchant = await Services.Merchant.get({ shop_id: params.shop });
-    if (!merchant) throwError('Merchant not found.');
-    // Serializes migration/settings against the legacy Shopify charge path.
-    return Services.MerchantBilling.withLock(merchant._id, async (current) => {
-        if (current.billing_controls?.version || current.billing_type !== 'shopify') {
-            return { charged: false, skipped: true, reason: 'billing_provider_changed' };
-        }
-        return chargeLegacyStatementOnShopify(params);
-    });
-};
 
 Billing.getUsagesRecord = async (session, charge_id) => {
     try {

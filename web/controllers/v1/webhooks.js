@@ -17,6 +17,44 @@ const sqs = new SQSClient({
 const QUEUE_URL = process.env.SQS_QUEUE_URL;
 const THROTTLE_MS = 1; // SAME as old file queue
 
+const StripeCheckout = async (req, res) => {
+  const webhookSecret = String(
+    process.env.STRIPE_WEBHOOK_SECRET ||
+      Config.get("APP").STRIPE_WEBHOOK_SECRET ||
+      ""
+  ).trim();
+  if (!webhookSecret) {
+    Logger.error("Stripe webhook rejected: STRIPE_WEBHOOK_SECRET is not configured.");
+    return res.status(503).send("Stripe webhook is not configured.");
+  }
+
+  let event;
+  try {
+    event = StripeAPI.constructWebhookEvent(
+      req.body,
+      req.headers["stripe-signature"],
+      webhookSecret
+    );
+  } catch (error) {
+    Logger.error(`Stripe webhook signature verification failed: ${error.message}`);
+    return res.status(400).send("Invalid Stripe webhook signature.");
+  }
+
+  try {
+    if (
+      event.type === "checkout.session.completed" ||
+      event.type === "checkout.session.async_payment_succeeded" ||
+      event.type === "checkout.session.expired"
+    ) {
+      await Services.ReturnExchangePayment.handleCheckoutEvent(event.data.object);
+    }
+    return res.status(200).send({ received: true });
+  } catch (error) {
+    Logger.error(`Stripe webhook processing failed: ${error.stack || error.message}`);
+    return res.status(500).send("Stripe webhook processing failed.");
+  }
+};
+
 
 const hasSwipeTagChange = (payload = {}) => {
   const currentTags = payload.tags || "";
@@ -816,6 +854,12 @@ router.post(
 // NON-SHOPIFY / INTERNAL
 // --------------------
 
+router.post(
+  "/stripe",
+  express.raw({ type: "application/json", limit: "1mb" }),
+  StripeCheckout
+);
+
 router.post("/register", Auth.check, RegisterAllWebhooks);
 
 router.post(
@@ -952,9 +996,5 @@ router.post(
 );
 
 
-
-// Isolated from Shopify and customer-payment webhooks; this route receives raw bytes.
-router.post('/merchant-billing-stripe', express.raw({ type: 'application/json', limit: '2mb' }),
-    require('../../utils/merchantBillingWebhook')());
 
 module.exports = router;

@@ -10,7 +10,7 @@
     "prod": "node index.js",
     "start": "node script/dev.cjs develop",
     "pm2": "pm2 start app.ecosystem.config.cjs --env production",
-    "test": "node --test test/google-sheet.test.js test/claim-eligibility.test.js test/merchant-details.test.js test/merchant-billing.test.js test/statement-billing.test.js test/shopify-billing.test.js"
+    "test": "node --test test/google-sheet.test.js test/claim-eligibility.test.js test/merchant-details.test.js test/order-email-search.test.js"
   },
   "engines": {
     "node": ">=18"

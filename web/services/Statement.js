@@ -1,6 +1,5 @@
 const statementModels = Models.Statement;
 const Statement = {};
-const { snapshotAmount } = require('../utils/merchantBillingPolicy');
 
 const moneyStrToCents = (value) => {
   if (value == null) return 0;
@@ -172,8 +171,7 @@ Statement.aggregate = async (pipeline, allowDiskUse = false) => {
 
 Statement.CreatePdf = async (payload = {}) => {
   try {
-    const { merchantIds, month, year, captureOnly = false } = payload;
-    const billingSnapshots = [];
+    const { merchantIds, month, year } = payload;
     const TZ = "America/Chicago";
     let targetMoment;
     if (month && year) {
@@ -210,7 +208,7 @@ Statement.CreatePdf = async (payload = {}) => {
       },
       {
         $match: {
-          $or: [{ "merchant.is_billing": true }, { "merchant.billing_controls.version": 1 }],
+          "merchant.is_billing": true,
           "merchant.is_active": true,
         },
       },
@@ -293,9 +291,7 @@ let statement = await Services.Statement.get({
 
 const [stmtYear, stmtMonth] = lastMonth.split("-").map(Number);
 
-if (captureOnly) {
-  statement = statement || { month: stmtMonth, year: stmtYear, createdAt: new Date() };
-} else if (!statement) {
+if (!statement) {
   statement = await Services.Statement.insert({
     merchant: merchantDetail._id,
     statement_month: lastMonth,
@@ -408,38 +404,7 @@ if (captureOnly) {
 
       merchantDetail.statement_details = statement;
 
-      // Use precisely the same rows and commission rounding as the statement PDF.
-      // Preview does not create a statement, send email or contact a billing provider.
-      if (captureOnly) {
-        billingSnapshots.push({ ...snapshotAmount({
-          fees: Number(merchantDetail.fees_collected),
-          credits: Number(merchantDetail.total_claims),
-          commission: Number(merchantDetail.competition || 0),
-        }), merchant: String(merchantDetail._id), claims: uniqueClaims });
-        return;
-      }
-
-      if (merchantDetail.billing_controls?.version === 1) {
-        const billed = await Models.MerchantBillingRun.findById(`${merchantDetail._id}:${lastMonth}`).lean();
-        if (billed) {
-          // Regeneration must not change the amount/claim rows of an already frozen bill.
-          merchantDetail.fees_collected = billed.snapshot.fees;
-          merchantDetail.total_claims = billed.snapshot.credits;
-          merchantDetail.claim = billed.snapshot.claims;
-          merchantDetail.total_refunds = billed.snapshot.claims.filter(c => c.raw_type === 'Refund').reduce((n, c) => n + c.raw_amount, 0);
-          merchantDetail.total_reorders = billed.snapshot.credits - merchantDetail.total_refunds;
-          merchantDetail.competition = billed.snapshot.commission;
-          merchantDetail.current_month_total = (billed.snapshot.fees - billed.snapshot.credits).toFixed(2);
-          merchantDetail.total_billed_amount = merchantDetail.current_month_total;
-          await Services.Statement.findOneAndUpdate({ _id: statement._id }, { $set: {
-            billing_run_id: billed._id, billing_status: billed.status,
-            billing_provider: billed.provider, billing_amount_cents: billed.snapshot.amount_cents,
-            ...(billed.invoice_url ? { payment_link: billed.invoice_url } : {}),
-          } });
-        }
-      }
-
-      if (merchantDetail.billing_type === "shopify" && !merchantDetail.billing_controls?.version) {
+      if (merchantDetail.billing_type === "shopify") {
         try {
           const totalDueToSwipe = parseFloat(
             merchantDetail.total_due_to_swipe ||
@@ -480,7 +445,6 @@ if (captureOnly) {
 
     return {
       merchantsProcessed: usagesRecords.length,
-      ...(captureOnly ? { billingSnapshots } : {}),
       message: "PDF generation successful.",
     };
 

@@ -31,7 +31,7 @@ const s3Client = new S3Client({
 ========================= */
 
 module.exports = {
-    send: async (to, subject, message, attachment, cc = [], options = {}) => {
+    send: async (to, subject, message, attachment, cc = []) => {
         const params = {
             Destination: {
                 ToAddresses: to,
@@ -76,9 +76,7 @@ module.exports = {
             const command = new SendEmailCommand(params);
             const data = await sesClient.send(command);
             console.log("Email sent.", data);
-            return data;
         } catch (err) {
-            if (options.throwOnError) throw err;
             console.log("Email Not Sent.!!", err);
         }
     },

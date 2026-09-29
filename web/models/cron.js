@@ -465,11 +465,6 @@ const initAndStartCron = async () => {
     await ensureSendDailyReportJobExists(CronTask);
     await ensureStatisticsJobExists(CronTask);
     await ensureSheetPendingJobExists(CronTask);
-    await CronTask.findOneAndUpdate(
-      { action: 'MerchantBilling' },
-      { $set: { interval: '*/15 * * * *', isEnabled: true }, $setOnInsert: { sleepUntil: new Date() } },
-      { upsert: true, new: true }
-    );
 
     const collection = mongoose.connection.collection("cron_jobs");
 
@@ -530,9 +525,6 @@ const initAndStartCron = async () => {
           // =====================================================
           // OTHER ACTIONS (UNCHANGED)
           // =====================================================
-          else if (doc.action === 'MerchantBilling') {
-            await getService('MerchantBilling').runScheduled();
-          }
           else if (doc.action === "GoogleSheetPendingClaims") {
             const sheetService = getService("GoogleSheet");
             if (!sheetService?.refreshMonthlyPendingClaims) {

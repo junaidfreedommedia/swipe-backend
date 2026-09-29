@@ -150,9 +150,7 @@ const StatementFilter = async (req, res, next) => {
 
 const createStatement = async (req, res, next) => {
     try {
-        // Internal capture-only options must not be accepted from API callers.
-        const { merchantIds, month, year } = req.body;
-        const response = await Services.Statement.CreatePdf({ merchantIds, month, year });
+        const response = await Services.Statement.CreatePdf(req.body);
         console.log(response);
         if (response.merchantsProcessed > 0) {
             return res.status(200).send({
@@ -185,9 +183,6 @@ const deleteStatement = async (req, res, next) => {
       });
     }
 
-    if (statement.billing_run_id || await Models.MerchantBillingRun.exists({ _id: `${statement.merchant}:${statement.statement_month}` })) {
-      return res.status(409).send({ message: 'A billed statement must be retained for payment history.' });
-    }
     await Models.Statement.deleteOne({ _id: id });
 
     return res.status(200).send({
