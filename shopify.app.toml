@@ -1,0 +1,32 @@
+# Learn more about configuring your app at https://shopify.dev/docs/apps/tools/cli/configuration
+
+client_id = "75592f16f6194c97a3a09f158e80dbe7"
+name = "Swipe"
+handle = "swipe-2"
+application_url = "https://app.swipe.ai/"
+embedded = false
+
+[webhooks]
+api_version = "2025-07"
+
+  [[webhooks.subscriptions]]
+  uri = "/api/webhooks"
+  compliance_topics = [ "customers/data_request", "customers/redact", "shop/redact" ]
+
+[access_scopes]
+# Learn more at https://shopify.dev/docs/apps/tools/cli/configuration#access_scopes
+scopes = "read_all_orders,read_orders,read_assigned_fulfillment_orders,read_customers,read_inventory,read_merchant_managed_fulfillment_orders,read_returns,read_themes,write_discounts,write_merchant_managed_fulfillment_orders,write_orders,write_price_rules,write_products,write_publications,read_locations"
+
+[auth]
+redirect_urls = [
+  "https://app.swipe.ai/auth/callback",
+  "https://app.swipe.ai/auth/shopify/callback",
+  "https://app.swipe.ai/api/auth/callback",
+  "https://app.swipe.ai/.shopify/graphiql/auth/callback"
+]
+
+[pos]
+embedded = false
+
+[build]
+automatically_update_urls_on_dev = false

@@ -1,0 +1,103 @@
+module.exports = {
+    AUTH_TOKEN_EMPTY:
+        "Your session has expired. Please login again to continue.",
+    LOGIN_SUCCESS: "Login Successful.",
+    ALREADY_REGISTER: "You have already register with this merchant.",
+    LOGIN_INVALID: "Email & Password do not match.",
+    MERCHANT_NOT_EXIST: "Merchant does not exist.",
+    ADD_ORDER_TAGS: "Order tags updated successfully.",
+    EMAIL_EXIST: "An account already exists with this email address.",
+    USER_NOT_EXIST: "User does not exist.",
+    EMAIL_NOT_EXIST: "The email you entered doesn't belong to an account.",
+    DATA_FOUND: "Data found.",
+    DATA_NOT_FOUND: "No Records found",
+    INVALID_MERCHANT_ID: "Invalid merchant ID",
+    MERCHANT_NOT_FOUND: "no merchant information found",
+    DATA_ADDED: "Data successfully saved to the database",
+    DATA_DID_NOT_ADDED: "Data did not added",
+    DATA_UPDATED: "Data successfully updated",
+    INVALID_DETAILS: "Invalid Details",
+    USER_REGISTERED: "User Successfully Registered",
+    USER_ADDED: "Added User Successfully",
+    USER_INFO_UPDATE: "User successfully updated.",
+    USER_DELETED_SUCCESS: "User successfully Deleted",
+    USER_DELETED_ERROR: "You could not be Deleted Logged-in User",
+    USER_INACTIVE_ERROR: "You could not be Inactive Logged-in User",
+    PASSWORD_LINK_SENT:
+        "You will receive an email with reset password instructions momentarily.",
+    INVALID_ACTIVATION_LINK:
+        "This activation link is expired or has already been used.",
+    PASSWORD_CHANGE_SUCCESS: "Password successfully changed.",
+    PASSWORD_CHANGE_ERROR: "Password could not be changed.",
+    CLAIM_CREATED: "Claim Successfully Created",
+    PASSWORD_UPDATE: "Your Password Update Successfully",
+    CURRENT_PASSWORD_NOT_MATCH: "Current Password Is Not Match",
+    NEW_AND_CONFIRM_PASSWORD_NOT_MATCH:
+        "New Password And Current Password Is Not Matched!",
+    CLAIM_DETAILS_NOT_FOUND: "Claim Details Not Found",
+    ACCOUNT_DETAILS_NOTFOUND: "Account Details Not Found",
+    ORDER_NOT_FOUND: "Order not found.",
+    NOT_RBS_PERMISSION: "You Have Not Permission To Edit.",
+    VERIFY_FIRST:
+        "Your account is not verified yet. Please set your password and log in here.",
+    NOT_SWIPE_PROTECTED: "This order is not protected by Swipe.",
+    SWIPE_PROTECTED: "This order dose have swipe Package Protection",
+    TASK_UPDATED: "Task Update Successfully",
+    VARIANT_NOT_FOUND: "Variant is not available in inventory!",
+    CLAIM_NOT_FOUND: "Claims Not Found!",
+    CLAIM_UPDATE: "Claim Successfully Updated",
+    CLAIM_IS_CREATED: "Claim is created on this Order!",
+    NEW_PASSWORD_CURRENT_PASSWORD:
+        "Does not add Current Password and New Password same!",
+    INVALID_EMAIL: "Please Enter Valid Email",
+    PASSWORD_LENGTH:
+        "Password should be at least 8 characters long, contain at least one uppercase letter, at least one special characters ,and at least one lowercase letter.",
+    WEBHOOK_ERROR: "Could not verify request.",
+    EVENT_SAVE: "Event Saved Successfully",
+    CLAIM_NOT_APPROVED: "Claim does not Approved",
+    TOTAL_CLAIM_AMOUNT_ERROR:
+        "You can't Refund OR Reorder more than Order Amount!",
+    STATEMENT_PREVIEW_ERROR: "Statement Preview not available!",
+    MERCHANT_USER_ALREADY_ADDED: "Already One Merchant User Register!",
+    DISCOUNT_UPDATED: "Discount Update Successfully!",
+    APP_CREDIT_MESSAGE:
+        "App credit created for claim:[CLAIM_ID] order:#[ORDER_ID] type:[TYPE] amount[AMOUNT]",
+    NOT_ACTIVE_SUBSCRIPTION_FOUND: "Not active subscription found",
+    SUBSCRIPTION_CANCELED: "Subscription successfully canceled",
+    WEBHOOK_REGISTER_SUCCESS: "Webhook registered successfully",
+    BILLING_NOT_APPROVED: "Shopify billing is not approved",
+    PAYMENT_LINK_EXPIRED:
+        "Sorry, but this payment link is out of date. It has been used previously or has reached its expiration date. Please reach out to the sender to ask for a fresh link.",
+    PAYMENT_LINK_VALID:
+        "Congratulations! This payment link is working. You can now go ahead with the payment process. Please follow the steps on the screen.",
+    PDF_GENERATED: "PDF generate successfully!",
+    IS_OWN_ACL_ERROR: "You don't have permission to change this record.",
+    COMMENT_ADDED: "New comment added",
+    CUSTOMER_NOT_FOUND: "Customer is not created",
+    CUSTOMER_CREATED: "Customer created with payment method successfully",
+    BANK_DETAILS_SAVE: "Bank details save successfully",
+    ENTER_ACTIVE_FIELD:
+        "Please enter active field value it is required to fill this field",
+    ENTER_REQUIRED_FIELD:
+        "Please fill all three fields: merchant_categories, merchant_categories_age, merchant_categories_gender.",
+    REQUIRED_USER: "Please add atleat one user",
+    SHOPIFY_SESSION_NOT_FOUND: "Merchant shopify session not exiest.",
+    SHOPIFY_SESSION_EXPIRED:
+        "[API] Invalid API key or access token (unrecognized login or wrong password)",
+    REPORT_SEND: "Report sent successfully.",
+    CAPACITY_REACHED: "Could not create record because capacity was reached",
+    INVALID_ORDER: "Please Enter Valid Order Number",
+    INVALID_ORDER_ID: "Please Enter Valid Order ",
+    INVALID_SHOP_ID:
+        "Merchant not found. Please check your URL — you may have entered an incorrect shop ID.",
+    MERCHANT_BLOCKED: "Merchant has been blocked successfully",
+    MERCHANT_DELETED: "Merchant has been deleted successfully",
+    MERCHANT_RESTORED: "Merchant has been restored successfully",
+    INVALID_SHOP: "Invalid shop ID provided",
+    USERS_FETCHED: "Users fetched successfully.",
+    EMAIL_SENT_SUCCESSFULLY: "Email sent successfully.",
+    ALREADY_DELETED:
+        "Your account is currently inactive. Please contact support to reactivate your account.",
+    ALREADY_DELETED_REACTIVE_IT: 
+      "This account is currently inactive. Please update the status to reactivate the account.",
+};

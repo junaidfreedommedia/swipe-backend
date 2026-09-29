@@ -1,0 +1,59 @@
+{
+    "APP": {
+        "NODE_ENV": "",
+        "HOST": "",
+        "FRONTEND_PORT": "",
+        "BACKEND_PORT": "",
+        "SHOPIFY_API_KEY": "",
+        "SHOPIFY_CLIENT_SECRET": "",
+        "SCOPE": [],
+        "SERVER": "Prod",
+        "REDIRECT_URL": "",
+        "SECRET": "0k8wpAXPfyfLakQwvTRxigEug0CpvODmDJgL08Br",
+        "TOKENEXPIRESTIME": "24h",
+        "FE_HOST": "",
+        "BE_HOST": "",
+        "PDF_PATH": "/home/ubuntu/asset/statements",
+        
+        "CRON_SECRET": "dashboardswipeaicron"
+    },
+    "AWS_SERVICES":{
+        "EMAIL":"Swipe<swipe@swipe.ai>",
+  "BRAND_LOGO_URL": "https://swipe.ai/wp-content/uploads/2025/05/favicon.png"
+    },
+    "AWS_CREDENTIALS" : {
+        "AWS_ACCESS_KEY": "",
+        "AWS_SECRET_KEY": "",
+        "AWS_REGION": ""
+      },
+    "DB": {
+        "URL": "",
+        "NAME": ""
+    },
+    "WEBHOOK": {
+        "URL": "",
+        "TOPIC_ARRAY": [],
+        "format": "json",
+        "TOPIC": {
+            "ORDER_CREATE": "orders/create",
+            "APP_UNINSTALLED": "app/uninstalled",
+            "ORDERS_FULFILLED": "orders/fulfilled",
+            "ORDERS_UPDATED": "orders/updated", 
+            "ORDERS_CANCELLED": "orders/cancelled",
+            "ORDERS_EDITED": "orders/edited",
+            "ORDERS_PARTIALLY_FULFILLED": "orders/partially_fulfilled",
+            "SHOP_UPDATE": "shop/update",
+            "REFUND_CREATE":"refunds/create"
+        }
+    },
+   
+    "BILLING_CONFIG": {
+        "Swipe": {
+          "amount": 20000,
+          "currencyCode": "USD",
+          "interval": "USAGE",
+          "usageTerms": "Swipe will charge you based on the amount of your protection order."
+        }
+    },
+    "IS_TEST_BILLING": true
+}

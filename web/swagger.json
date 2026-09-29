@@ -1,0 +1,3103 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Swipe Shopify"
+    },
+    "servers": [
+        {
+            "url": "/"
+        }
+    ],
+    "components": {
+        "securitySchemes": {
+            "apiKeyAuth": {
+                "type": "apiKey",
+                "in": "header",
+                "name": "x-access-token"
+            }
+        }
+    },
+    "security": [
+        {
+            "apiKeyAuth": []
+        }
+    ],
+    "paths": {
+        "/admin/billing/:paymentLinkId": {
+            "get": {
+                "tags": ["Billing"],
+                "summary": "Billing Complete API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Congratulations! This payment link is working. You can now go ahead with the payment process. Please follow the steps on the screen."
+                    },
+                    "400": {
+                        "description": "Sorry, but this payment link is out of date. It has been used previously or has reached its expiration date. Please reach out to the sender to ask for a fresh link."
+                    }
+                }
+            }
+        },
+        "/admin/billing/get-usage": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Usages Record API",
+                "requestBody": {
+                    "description": "Get Usage Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Get-Usage"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Merchant have not approved billing"
+                    }
+                }
+            }
+        },
+        "/admin/billing/send-billing": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Send Billing API",
+                "requestBody": {
+                    "description": "Send Billing Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Send-Billing"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Merchant does not exist."
+                    },
+                    "400": {
+                        "description": "Merchant have not approved billing"
+                    }
+                }
+            }
+        },
+        "/admin/billing/create-usage": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Create Usage API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Record created"
+                    },
+                    "400": {
+                        "description": "Could not create record because capacity was reached"
+                    }
+                }
+            }
+        },
+        "/admin/billing/create-credit": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Create App Credit API",
+                "requestBody": {
+                    "description": "Create Credit Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Create-Credit"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Credit created"
+                    },
+                    "400": {
+                        "description": "Could not create app credit"
+                    }
+                }
+            }
+        },
+        "/admin/billing/external": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "External API",
+                "requestBody": {
+                    "description": "External Billing Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/External-Billing"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Payment Method Added Successfully"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/admin/billing/cancel-billing": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Billing Cancel API",
+                "requestBody": {
+                    "description": "Billing Cancel Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Cancel-Billing"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Billing Cancel Successfully"
+                    },
+                    "400": {
+                        "description": "Error in billing cancelling"
+                    }
+                }
+            }
+        },
+        "/admin/claims/:id": {
+            "get": {
+                "tags": ["Claims"],
+                "summary": "Claim Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Details Claimed Successfully"
+                    },
+                    "400": {
+                        "description": "Error in Details Claiming"
+                    }
+                }
+            }
+        },
+        "/admin/claims/list": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Claim Lists API",
+                "requestBody": {
+                    "description": "Claim List Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Claim-List"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/claims/event/add": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Add Claim Event API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Event Saved Successfully"
+                    },
+                    "400": {
+                        "description": "Event Save failed"
+                    }
+                }
+            }
+        },
+        "/admin/claims/search/order": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Order Search API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Order fetched Successfully"
+                    },
+                    "400": {
+                        "description": "Order did not found"
+                    }
+                }
+            }
+        },
+        "/admin/claims/new/claims": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Create Claim API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Claim Created Successfully"
+                    },
+                    "400": {
+                        "description": "Claim did not created"
+                    }
+                }
+            }
+        },
+        "/admin/claims/approve-or-reject/:id": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Claim Approve Or Reject API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Claim Successfully Updated"
+                    },
+                    "400": {
+                        "description": "Claim did not updated"
+                    }
+                }
+            }
+        },
+        "/admin/claims/approved": {
+            "put": {
+                "tags": ["Claims"],
+                "summary": "Claim Approve API",
+                "requestBody": {
+                    "description": "Claim Approve Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Claim-Approve"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Claim Successfully Approved"
+                    },
+                    "400": {
+                        "description": "Claim does not Approved"
+                    }
+                }
+            }
+        },
+        "/admin/claims/comment/{claim}": {
+            "get": {
+                "tags": ["Claims"],
+                "summary": "ClaimList Comment API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "claim",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/claims/comment": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Comments Lists API",
+                "requestBody": {
+                    "description": "Comments List Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Comments-List"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Comment added successfully"
+                    },
+                    "400": {
+                        "description": "Comment did not added"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/statistic/revenue": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details statistics revenue API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/claim/statistic": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details claim statistics API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/statistics": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "dashboard statistics API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard statistics fetched successfully"
+                    },
+                    "400": {
+                        "description": "Dashboard statistics did not fetched"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard/activity": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "activity List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/engage/list": {
+            "get": {
+                "tags": ["Engages"],
+                "summary": "Engage Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/engage/upsert": {
+            "post": {
+                "tags": ["Engages"],
+                "summary": "Engage upsert API",
+                "requestBody": {
+                    "description": "Engage upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "store_name": {
+                                        "type": "string",
+                                        "example": "***** new store"
+                                    },
+                                    "website": {
+                                        "type": "string",
+                                        "example": "mailto:new@yop.com"
+                                    },
+                                    "bio": {
+                                        "type": "string",
+                                        "example": "yes"
+                                    },
+                                    "causes": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Handmade"
+                                        },
+                                        "example": [
+                                            "Handmade",
+                                            "Ethically Made"
+                                        ]
+                                    },
+                                    "logo": {
+                                        "type": "string",
+                                        "example": "url"
+                                    },
+                                    "cover_image": {
+                                        "type": "string",
+                                        "example": "url"
+                                    },
+                                    "company_contact_email": {
+                                        "type": "string",
+                                        "example": "test4@yopmail.com"
+                                    },
+                                    "company_contact_phone": {
+                                        "type": "integer",
+                                        "example": "911"
+                                    },
+                                    "company_contact_link": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "support_contact_email": {
+                                        "type": "string",
+                                        "example": "test5@yopmail.com"
+                                    },
+                                    "support_contact_phone": {
+                                        "type": "integer",
+                                        "example": "111"
+                                    },
+                                    "support_contact_link": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "returns_contact_email": {
+                                        "type": "string",
+                                        "example": "test6@yopmail.com"
+                                    },
+                                    "returns_contact_phone": {
+                                        "type": "integer",
+                                        "example": "311"
+                                    },
+                                    "returns_contact_link": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "merchant_categories": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Media"
+                                        },
+                                        "example": ["Media", "Fashion"]
+                                    },
+                                    "merchant_categories_age": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "adult"
+                                        },
+                                        "example": ["adult", "children"]
+                                    },
+                                    "merchant_categories_gender": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Female"
+                                        },
+                                        "example": ["Female", "Male", "unisex"]
+                                    },
+                                    "feed_image": {
+                                        "type": "string",
+                                        "example": "url"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "data Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+
+        "/admin/merchant/store": {
+            "get": {
+                "tags": ["Merchant"],
+                "summary": "Merchant List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "query",
+                        "name": "merchant",
+                        "type": "string",
+                        "description": "The ID of the merchant"
+                    },
+                    {
+                        "in": "query",
+                        "name": "start_date",
+                        "type": "string",
+                        "format": "date",
+                        "description": "The start date for filtering results (MM-DD-YYYY)"
+                    },
+                    {
+                        "in": "query",
+                        "name": "end_date",
+                        "type": "string",
+                        "format": "date",
+                        "description": "The end date for filtering results (MM-DD-YYYY)"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found."
+                    }
+                }
+            }
+        },
+        "/admin/merchant/storelist": {
+            "get": {
+                "tags": ["Merchant"],
+                "summary": "Merchant store Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/merchant/{id}": {
+            "get": {
+                "tags": ["Merchant"],
+                "summary": "Merchant Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/merchant/add-user": {
+            "post": {
+                "tags": ["Merchant"],
+                "summary": "Merchant add API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Merchant added successfully"
+                    },
+                    "400": {
+                        "description": "Merchant did not added"
+                    }
+                }
+            }
+        },
+        "/admin/merchant/edit-profile/{id}": {
+            "put": {
+                "tags": ["Merchant"],
+                "summary": "Update Merchant API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Merchant updated successfully"
+                    },
+                    "400": {
+                        "description": "Merchant did not updated"
+                    }
+                }
+            }
+        },
+        "/admin/merchant/delete": {
+            "delete": {
+                "tags": ["Merchant"],
+                "summary": "Delete Merchant API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User successfully Deleted"
+                    },
+                    "400": {
+                        "description": "You could not be Deleted Logged-in User"
+                    }
+                }
+            }
+        },
+        "/admin/merchant/discount": {
+            "post": {
+                "tags": ["Merchant"],
+                "summary": "Discount API",
+                "requestBody": {
+                    "description": "Discount Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Discount"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Discount Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/admin/merchant/claim/graph/{id}": {
+            "get": {
+                "tags": ["Admin"],
+                "summary": "Claim Graph API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/merchant/task/{id}": {
+            "get": {
+                "tags": ["Merchant"],
+                "summary": "Filter Dashboard API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard Filtered Successfully!"
+                    },
+                    "400": {
+                        "description": "Dashboard Filtered Failed!"
+                    }
+                }
+            }
+        },
+        "/admin/merchant/task/": {
+            "put": {
+                "tags": ["Merchant"],
+                "summary": "Task Update API",
+                "requestBody": {
+                    "description": "Task Update Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/admin/merchant/setting": {
+            "post": {
+                "tags": ["Merchant"],
+                "summary": "Setting upsert API",
+                "requestBody": {
+                    "description": "Setting upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "billing_contact_email": {
+                                        "type": "string",
+                                        "example": "post-protection.myshopify.com"
+                                    },
+                                    "reimbursement_contact_email": {
+                                        "type": "string",
+                                        "example": "post-protection.myshopify.com"
+                                    },
+                                    "claims_contact_email": {
+                                        "type": "string",
+                                        "example": "post-protection.myshopify.com"
+                                    },
+                                    "route_plus_package_protection": {
+                                        "type": "string",
+                                        "example": "on"
+                                    },
+                                    "protection_widget": {
+                                        "type": "string",
+                                        "example": "on"
+                                    },
+                                    "thank_you_page_tracking_link": {
+                                        "type": "string",
+                                        "example": "on"
+                                    },
+                                    "free_shipping_and_protection_bar": {
+                                        "type": "string",
+                                        "example": "on"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "data Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/admin/merchant/settinglist/{id}": {
+            "get": {
+                "tags": ["Admin"],
+                "summary": "Setting Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/order/list": {
+            "get": {
+                "tags": ["Orders"],
+                "summary": "Order List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/order/order-list/{merchant}": {
+            "get": {
+                "tags": ["Orders"],
+                "summary": "Merchant Order List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+
+        "/admin/shippingnotification/notification": {
+            "post": {
+                "tags": ["ShippingNotification"],
+                "summary": "ShippingNotification upsert API",
+                "requestBody": {
+                    "description": "ShippingNotification upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "order_created_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "order_created_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "order_created_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipping_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipping_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipping_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipment_delay_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipment_delay_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipment_delay_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_transit_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_transit_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_transit_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "carrier_delay_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "carrier_delay_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "out_for_delivery_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "out_for_delivery_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "out_for_delivery_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "delivered_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "delivered_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "delivered_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "data Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/admin/shippingnotification/list": {
+            "get": {
+                "tags": ["ShippingNotification"],
+                "summary": "ShippingNotification List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/statement/": {
+            "post": {
+                "tags": ["Statement"],
+                "summary": "Statement API",
+                "requestBody": {
+                    "description": "Statement Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Statement"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/statement/create-statement": {
+            "post": {
+                "tags": ["Statement"],
+                "summary": "Statement API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Statement Created Successfully!."
+                    },
+                    "400": {
+                        "description": "Statement did not created"
+                    }
+                }
+            }
+        },
+        "/admin/statistics/list": {
+            "post": {
+                "tags": ["Statistics"],
+                "summary": "Admin dashboard API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/statistics/cron": {
+            "post": {
+                "tags": ["Statistics"],
+                "summary": "Cron API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Cron running successfully."
+                    },
+                    "400": {
+                        "description": "Failed to run Cron"
+                    }
+                }
+            }
+        },
+        "/admin/users/add": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "User add API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User added successfully."
+                    },
+                    "400": {
+                        "description": "User did not added"
+                    }
+                }
+            }
+        },
+        "/admin/users/{id}": {
+            "put": {
+                "tags": ["Users"],
+                "summary": "User Profile Update API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User successfully updated"
+                    },
+                    "400": {
+                        "description": "User did not updated"
+                    }
+                }
+            }
+        },
+        "/admin/users/filter/{merchantId}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "User Data API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/users/": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "User Data API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/admin/users/delete/{id}": {
+            "delete": {
+                "tags": ["Users"],
+                "summary": "User Delete API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User successfully Deleted"
+                    },
+                    "400": {
+                        "description": "You could not be Deleted Logged-in User"
+                    }
+                }
+            }
+        },
+
+        "/admin/widget/{id}/{key}": {
+            "get": {
+                "tags": ["Widgets"],
+                "summary": "Widget Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "key",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/admin/widget/upsert": {
+            "post": {
+                "tags": ["Widgets"],
+                "summary": "Widget upsert API",
+                "requestBody": {
+                    "description": "Widget upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "key": {
+                                        "type": "string",
+                                        "example": "cart_page"
+                                    },
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "is_active": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "enable_default_protection": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "show_protection_amount": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "new"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "description"
+                                            },
+                                            "first_tab_title": {
+                                                "type": "string",
+                                                "example": "a"
+                                            },
+                                            "first_tab_description": {
+                                                "type": "string",
+                                                "example": "a1"
+                                            },
+                                            "second_tab_title": {
+                                                "type": "string",
+                                                "example": "b"
+                                            },
+                                            "second_tab_description": {
+                                                "type": "string",
+                                                "example": "b1"
+                                            },
+                                            "third_tab_title": {
+                                                "type": "string",
+                                                "example": "c"
+                                            },
+                                            "third_tab_description": {
+                                                "type": "string",
+                                                "example": "c1"
+                                            },
+                                            "background_color": {
+                                                "type": "string",
+                                                "example": "black"
+                                            },
+                                            "title_text_color": {
+                                                "type": "string",
+                                                "example": "red"
+                                            },
+                                            "description_text_color": {
+                                                "type": "string",
+                                                "example": "blue"
+                                            },
+                                            "popup_title_color": {
+                                                "type": "string",
+                                                "example": "white"
+                                            },
+                                            "popup_description_color": {
+                                                "type": "string",
+                                                "example": "yellow"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Password successfully changed."
+                    },
+                    "400": {
+                        "description": "Password could not be changed."
+                    }
+                }
+            }
+        },
+
+        "/merchant/account_manager/": {
+            "get": {
+                "tags": ["Account Manager"],
+                "summary": "Account Info API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/merchant/billing/send-billing": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Send Billing API",
+                "requestBody": {
+                    "description": "Send Billing Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Send-Billing"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Merchant does not exist."
+                    },
+                    "400": {
+                        "description": "Merchant have not approved billing"
+                    }
+                }
+            }
+        },
+        "/merchant/billing/check-billing-status": {
+            "post": {
+                "tags": ["Billing"],
+                "summary": "Send Billing API",
+                "requestBody": {
+                    "description": "Send Billing Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Send-Billing"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Merchant does not exist."
+                    },
+                    "400": {
+                        "description": "Merchant have not approved billing"
+                    }
+                }
+            }
+        },
+        "/merchant/claims/limitedlist": {
+            "get": {
+                "tags": ["Claims"],
+                "summary": "Merchant limitedList API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/merchant/claims/list": {
+            "get": {
+                "tags": ["Claims"],
+                "summary": "Merchant List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/merchant/claims/{id}": {
+            "get": {
+                "tags": ["Claims"],
+                "summary": "Merchant Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Merchant Details found."
+                    },
+                    "400": {
+                        "description": "Merchant Details did not found."
+                    }
+                }
+            }
+        },
+        "/merchant/claims/order": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Merchant Order Search API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Order fetched Successfully"
+                    },
+                    "400": {
+                        "description": "Order Not Found"
+                    }
+                }
+            }
+        },
+        "/merchant/claims/newclaim": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Create Claim API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Claim Created Successfully"
+                    },
+                    "400": {
+                        "description": "Claim did not created"
+                    }
+                }
+            }
+        },
+        "/merchant/claims/comment/{claim}": {
+            "get": {
+                "tags": ["Claims"],
+                "summary": "ClaimList Comment API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "claim",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/claims/comment": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Comments Lists API",
+                "requestBody": {
+                    "description": "Comments List Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Comments-List"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Comment added successfully"
+                    },
+                    "400": {
+                        "description": "Comment did not added"
+                    }
+                }
+            }
+        },
+        "/merchant/dashboard/statistics/": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details statistics API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard statistics Details fetched successfully"
+                    },
+                    "400": {
+                        "description": "Dashboard statistics did not fetched"
+                    }
+                }
+            }
+        },
+        "/merchant/dashboard/protect/": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details protect API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard protect Details fetched successfully"
+                    },
+                    "400": {
+                        "description": "Dashboard protect did not fetched"
+                    }
+                }
+            }
+        },
+        "/merchant/dashboard/statistic/revenue": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details statistics revenue API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard statistics revenue Details fetched successfully"
+                    },
+                    "400": {
+                        "description": "Dashboard statistics revenue did not fetched"
+                    }
+                }
+            }
+        },
+        "/merchant/dashboard/claim/statistic/": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details claim statistics API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard claim statistics Details fetched successfully"
+                    },
+                    "400": {
+                        "description": "Dashboard claim statistics did not fetched"
+                    }
+                }
+            }
+        },
+        "/merchant/dashboard/claim/graph": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Dashboard Details claim graph API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Dashboard claim graph Details fetched successfully"
+                    },
+                    "400": {
+                        "description": "Dashboard claim graph did not fetched"
+                    }
+                }
+            }
+        },
+        "/merchant/engage/list": {
+            "get": {
+                "tags": ["Engages"],
+                "summary": "Engage Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/engage/upsert": {
+            "post": {
+                "tags": ["Engages"],
+                "summary": "Engage upsert API",
+                "requestBody": {
+                    "description": "Engage upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "store_name": {
+                                        "type": "string",
+                                        "example": "***** new store"
+                                    },
+                                    "website": {
+                                        "type": "string",
+                                        "example": "mailto:new@yop.com"
+                                    },
+                                    "bio": {
+                                        "type": "string",
+                                        "example": "yes"
+                                    },
+                                    "causes": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Handmade"
+                                        },
+                                        "example": [
+                                            "Handmade",
+                                            "Ethically Made"
+                                        ]
+                                    },
+                                    "logo": {
+                                        "type": "string",
+                                        "example": "url"
+                                    },
+                                    "cover_image": {
+                                        "type": "string",
+                                        "example": "url"
+                                    },
+                                    "company_contact_email": {
+                                        "type": "string",
+                                        "example": "test4@yopmail.com"
+                                    },
+                                    "company_contact_phone": {
+                                        "type": "integer",
+                                        "example": "911"
+                                    },
+                                    "company_contact_link": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "support_contact_email": {
+                                        "type": "string",
+                                        "example": "test5@yopmail.com"
+                                    },
+                                    "support_contact_phone": {
+                                        "type": "integer",
+                                        "example": "111"
+                                    },
+                                    "support_contact_link": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "returns_contact_email": {
+                                        "type": "string",
+                                        "example": "test6@yopmail.com"
+                                    },
+                                    "returns_contact_phone": {
+                                        "type": "integer",
+                                        "example": "311"
+                                    },
+                                    "returns_contact_link": {
+                                        "type": "string",
+                                        "example": "test"
+                                    },
+                                    "merchant_categories": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Media"
+                                        },
+                                        "example": ["Media", "Fashion"]
+                                    },
+                                    "merchant_categories_age": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "adult"
+                                        },
+                                        "example": ["adult", "children"]
+                                    },
+                                    "merchant_categories_gender": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "string",
+                                            "example": "Female"
+                                        },
+                                        "example": ["Female", "Male", "unisex"]
+                                    },
+                                    "feed_image": {
+                                        "type": "string",
+                                        "example": "url"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "data Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/merchant/order/list": {
+            "get": {
+                "tags": ["Orders"],
+                "summary": "Order List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/setting/upsert": {
+            "post": {
+                "tags": ["Merchant"],
+                "summary": "Setting upsert API",
+                "requestBody": {
+                    "description": "Setting upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "billing_contact_email": {
+                                        "type": "string",
+                                        "example": "post-protection.myshopify.com"
+                                    },
+                                    "reimbursement_contact_email": {
+                                        "type": "string",
+                                        "example": "post-protection.myshopify.com"
+                                    },
+                                    "claims_contact_email": {
+                                        "type": "string",
+                                        "example": "post-protection.myshopify.com"
+                                    },
+                                    "route_plus_package_protection": {
+                                        "type": "string",
+                                        "example": "on"
+                                    },
+                                    "protection_widget": {
+                                        "type": "string",
+                                        "example": "on"
+                                    },
+                                    "thank_you_page_tracking_link": {
+                                        "type": "string",
+                                        "example": "on"
+                                    },
+                                    "free_shipping_and_protection_bar": {
+                                        "type": "string",
+                                        "example": "on"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "data Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/merchant/setting/settinglist/{id}": {
+            "get": {
+                "tags": ["Admin"],
+                "summary": "Setting Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/setting/save-account": {
+            "post": {
+                "tags": ["Setting"],
+                "summary": "Save Merchant Account Setting API",
+                "requestBody": {
+                    "description": "Merchant Account Setting Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Save-Account"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Comment added successfully"
+                    },
+                    "400": {
+                        "description": "Comment did not added"
+                    }
+                }
+            }
+        },
+        "/merchant/setting/save-bank": {
+            "post": {
+                "tags": ["Setting"],
+                "summary": "Save Merchant Bank Account Details API",
+                "requestBody": {
+                    "description": "Merchant Bank Account Details Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Save-Bank"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Comment added successfully"
+                    },
+                    "400": {
+                        "description": "Comment did not added"
+                    }
+                }
+            }
+        },
+        "/merchant/setting/get-account/{type}": {
+            "get": {
+                "tags": ["Setting"],
+                "summary": "Merchant Account Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "type",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/setting/retrieve-payment": {
+            "get": {
+                "tags": ["Setting"],
+                "summary": "Retrive Merchant Payment Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/shippingnotification/notification": {
+            "post": {
+                "tags": ["ShippingNotification"],
+                "summary": "ShippingNotification upsert API",
+                "requestBody": {
+                    "description": "ShippingNotification upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "order_created_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "order_created_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "order_created_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipping_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipping_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipping_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipment_delay_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipment_delay_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "shipment_delay_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_transit_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_transit_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "in_transit_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "carrier_delay_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "carrier_delay_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "out_for_delivery_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "out_for_delivery_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "out_for_delivery_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "delivered_email": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "delivered_sms": {
+                                        "type": "boolean",
+                                        "example": true
+                                    },
+                                    "delivered_notifications": {
+                                        "type": "boolean",
+                                        "example": true
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "data Update Successfully!"
+                    },
+                    "400": {
+                        "description": "Merchant does not exist."
+                    }
+                }
+            }
+        },
+        "/merchant/shippingnotification/list": {
+            "get": {
+                "tags": ["ShippingNotification"],
+                "summary": "ShippingNotification List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/task/": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Task List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/merchant/task/setup-guide/{key}/{task}/{value}": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Setup-Guide Update API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Setup-Guide Update Successfully"
+                    },
+                    "400": {
+                        "description": "Setup-Guide did not Update."
+                    }
+                }
+            }
+        },
+        "/merchant/task/setup-list/": {
+            "get": {
+                "tags": ["Dashboard"],
+                "summary": "Setup-Guide List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found"
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/merchant/task/{task}": {
+            "put": {
+                "tags": ["Dashboard"],
+                "summary": "Task Update API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Task Update Successfully"
+                    },
+                    "400": {
+                        "description": "Task did not Update."
+                    }
+                }
+            }
+        },
+        "/merchant/users/register/": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Register API",
+                "requestBody": {
+                    "description": "Register Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Register"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User Successfully Registered"
+                    },
+                    "400": {
+                        "description": "User did not Registered"
+                    }
+                }
+            }
+        },
+        "/merchant/users/send-reset-password/{email}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "Resend Password API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "You will receive an email with reset password instructions momentarily."
+                    },
+                    "400": {
+                        "description": "The email you entered doesn't belong to an account."
+                    }
+                }
+            }
+        },
+        "/merchant/users/": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Add User API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User added successfully."
+                    },
+                    "400": {
+                        "description": "User did not added."
+                    }
+                }
+            }
+        },
+        "/merchant/users/list": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "User List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/users/validate-reset-password": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Validate Reset Password API",
+                "requestBody": {
+                    "description": "Validate Reset Password Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Validate-Reset-Password"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "This activation link is expired or has already been used."
+                    }
+                }
+            }
+        },
+        "/merchant/users/reset-password": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Reset Password API",
+                "requestBody": {
+                    "description": "Reset Password Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Reset-Password"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Password successfully changed."
+                    },
+                    "400": {
+                        "description": "Password could not be changed."
+                    }
+                }
+            }
+        },
+        "/merchant/users/details/{id}": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "User Details API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/users/edit/{id}": {
+            "put": {
+                "tags": ["Users"],
+                "summary": "User Edit API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully"
+                    },
+                    "400": {
+                        "description": "Failed to update user"
+                    }
+                }
+            }
+        },
+        "/merchant/users/delete/{id}": {
+            "delete": {
+                "tags": ["Users"],
+                "summary": "User Delete API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "User successfully Deleted"
+                    },
+                    "400": {
+                        "description": "You could not be Deleted Logged-in User"
+                    }
+                }
+            }
+        },
+        "/merchant/widget/{id}/{key}": {
+            "get": {
+                "tags": ["Widgets"],
+                "summary": "Widget Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "key",
+                        "required": false,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/merchant/widget/upsert": {
+            "post": {
+                "tags": ["Widgets"],
+                "summary": "Widget upsert API",
+                "requestBody": {
+                    "description": "Widget upsert Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "key": {
+                                        "type": "string",
+                                        "example": "cart_page"
+                                    },
+                                    "data": {
+                                        "type": "object",
+                                        "properties": {
+                                            "is_active": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "enable_default_protection": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "show_protection_amount": {
+                                                "type": "boolean",
+                                                "example": true
+                                            },
+                                            "title": {
+                                                "type": "string",
+                                                "example": "new"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "description"
+                                            },
+                                            "first_tab_title": {
+                                                "type": "string",
+                                                "example": "a"
+                                            },
+                                            "first_tab_description": {
+                                                "type": "string",
+                                                "example": "a1"
+                                            },
+                                            "second_tab_title": {
+                                                "type": "string",
+                                                "example": "b"
+                                            },
+                                            "second_tab_description": {
+                                                "type": "string",
+                                                "example": "b1"
+                                            },
+                                            "third_tab_title": {
+                                                "type": "string",
+                                                "example": "c"
+                                            },
+                                            "third_tab_description": {
+                                                "type": "string",
+                                                "example": "c1"
+                                            },
+                                            "background_color": {
+                                                "type": "string",
+                                                "example": "black"
+                                            },
+                                            "title_text_color": {
+                                                "type": "string",
+                                                "example": "red"
+                                            },
+                                            "description_text_color": {
+                                                "type": "string",
+                                                "example": "blue"
+                                            },
+                                            "popup_title_color": {
+                                                "type": "string",
+                                                "example": "white"
+                                            },
+                                            "popup_description_color": {
+                                                "type": "string",
+                                                "example": "yellow"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Password successfully changed."
+                    },
+                    "400": {
+                        "description": "Password could not be changed."
+                    }
+                }
+            }
+        },
+        "/v1/claims/": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "New Claim API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "New Claim successfully Created"
+                    },
+                    "400": {
+                        "description": "Error creating new claim"
+                    }
+                }
+            }
+        },
+        "/v1/claims/track/": {
+            "post": {
+                "tags": ["Claims"],
+                "summary": "Track Claim Details API",
+                "requestBody": {
+                    "description": "Track Claim Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Track-Claim"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/v1/datafix/webhook-list/{shop}": {
+            "get": {
+                "tags": ["Datafix"],
+                "summary": "Datafix Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "shop",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/v1/datafix/webhook-register/{shop}": {
+            "get": {
+                "tags": ["Datafix"],
+                "summary": "Datafix Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "shop",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/v1/datafix/usage-record-create/{shop}/{order}": {
+            "get": {
+                "tags": ["Datafix"],
+                "summary": "Datafix Get API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "shop",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "in": "path",
+                        "name": "order",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "No Records found"
+                    }
+                }
+            }
+        },
+        "/v1/datafix/order-create": {
+            "post": {
+                "tags": ["Datafix"],
+                "summary": "Find-Datafix API",
+                "requestBody": {
+                    "description": "Find Datafix Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Find-Datafix"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Datafix Found successfully"
+                    },
+                    "400": {
+                        "description": "Datafix Not Found"
+                    }
+                }
+            }
+        },
+        "/v1/datafix/remove-merchant-data/{shop}": {
+            "delete": {
+                "tags": ["datafix"],
+                "summary": "Delete datafix API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "shop",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Merchant successfully Deleted"
+                    },
+                    "400": {
+                        "description": "You could not be Deleted Logged-in Merchant"
+                    }
+                }
+            }
+        },
+        "/v1/orders/find-order/": {
+            "post": {
+                "tags": ["Orders"],
+                "summary": "Find-order API",
+                "requestBody": {
+                    "description": "Find Order Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Find-Order"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Order Found successfully"
+                    },
+                    "400": {
+                        "description": "Order Not Found"
+                    }
+                }
+            }
+        },
+        "/v1/statement/merchant/:merchantId": {
+            "get": {
+                "tags": ["Statement"],
+                "summary": "Merchant List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/v1/statement/preview/": {
+            "get": {
+                "tags": ["Statement"],
+                "summary": "Statement Preview API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/v1/statement/list/": {
+            "get": {
+                "tags": ["Statement"],
+                "summary": "Admin State List API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/v1/statement/download/": {
+            "get": {
+                "tags": ["Statement"],
+                "summary": "Statement Download API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Statement Preview Created Successfully!."
+                    },
+                    "400": {
+                        "description": "Statement Preview not available!"
+                    }
+                }
+            }
+        },
+        "/v1/users/login": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "User Login API",
+                "requestBody": {
+                    "description": "Login Payload",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/User-Login"
+                            }
+                        }
+                    }
+                },
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Successfully login.",
+                        "schema": {
+                            "$ref": "#/definitions/User-Login"
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid Credentials."
+                    }
+                }
+            }
+        },
+        "/v1/users/authenticate/": {
+            "get": {
+                "tags": ["Users"],
+                "summary": "User Authenticate API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "security": [
+                    {
+                        "apiKeyAuth": []
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Data found."
+                    },
+                    "400": {
+                        "description": "Data did not found."
+                    }
+                }
+            }
+        },
+        "/v1/users/resetpassword/": {
+            "post": {
+                "tags": ["Users"],
+                "summary": "Reset Password API",
+                "produces": ["application/json"],
+                "consumes": ["application/json"],
+                "responses": {
+                    "200": {
+                        "description": "Reset Password successfully."
+                    },
+                    "400": {
+                        "description": "Password did not reset."
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Get-Usage": {
+            "type": "object",
+            "properties": {
+                "shop_id": {
+                    "type": "string",
+                    "example": "post-protection-test-store.myshopify.com"
+                }
+            }
+        },
+        "Send-Billing": {
+            "type": "object",
+            "properties": {
+                "shop_id": {
+                    "type": "string",
+                    "example": "post-protection-test-store.myshopify.com"
+                }
+            }
+        },
+        "Create-Credit": {
+            "type": "object",
+            "properties": {
+                "shop_id": {
+                    "type": "string",
+                    "example": "post-protection-test-store.myshopify.com"
+                },
+                "amount": {
+                    "type": "number",
+                    "example": "180.60"
+                }
+            }
+        },
+        "External-Billing": {
+            "type": "object",
+            "properties": {
+                "merchant": {
+                    "type": "string",
+                    "example": "649514f8b22b438b01340cad"
+                },
+                "method_name": {
+                    "type": "string",
+                    "example": "stripe"
+                }
+            }
+        },
+        "Cancel-Billing": {
+            "type": "object",
+            "properties": {
+                "shop_id": {
+                    "type": "string",
+                    "example": "post-protect-dev.myshopify.com"
+                }
+            }
+        },
+        "Claim-List": {
+            "type": "object",
+            "properties": {
+                "merchant": {
+                    "type": "string",
+                    "example": "64995574c1f828b1ad642629"
+                },
+                "start_date": {
+                    "type": "string",
+                    "example": "11/12/2013"
+                },
+                "end_date": {
+                    "type": "string",
+                    "example": "23/04/2023"
+                }
+            }
+        },
+        "Claim-Approve": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "string",
+                    "example": ""
+                },
+                "claimId": {
+                    "type": "string",
+                    "example": ""
+                },
+                "claim_total": {
+                    "type": "string",
+                    "example": ""
+                },
+                "refund_total": {
+                    "type": "string",
+                    "example": ""
+                },
+                "refund_count": {
+                    "type": "string",
+                    "example": ""
+                },
+                "reorder_count": {
+                    "type": "string",
+                    "example": ""
+                },
+                "reorder_id": {
+                    "type": "string",
+                    "example": ""
+                },
+                "reorder_total": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "Task-Update": {
+            "type": "object",
+            "properties": {
+                "task": {
+                    "type": "string",
+                    "example": ""
+                },
+                "status": {
+                    "type": "string",
+                    "example": ""
+                },
+                "merchant": {
+                    "type": "string",
+                    "example": "64995574c1f828b1ad642629"
+                }
+            }
+        },
+        "Comments-List":{
+            "type": "object",
+            "properties": {
+                "claim": {
+                    "type": "string",
+                    "example": "64b6470e68741bc90af6dd82"
+                },
+                "content": {
+                    "type": "string",
+                    "example": "new admin updated comment"
+                }
+            }
+        },
+        "Discount": {
+            "type": "object",
+            "properties": {
+                "merchant": {
+                    "type": "string",
+                    "example": "64995574c1f828b1ad642629"
+                },
+                "discount": {
+                    "type": "string",
+                    "example": "20rs"
+                }
+            }
+        },
+        "Statement": {
+            "type": "object",
+            "properties": {
+                "merchant": {
+                    "type": "string",
+                    "example": "64995574c1f828b1ad642629"
+                },
+                "start_date": {
+                    "type": "string",
+                    "example": "11/12/2013"
+                },
+                "end_date": {
+                    "type": "string",
+                    "example": "23/04/2023"
+                }
+            }
+        },
+        "Register": {
+            "type": "object",
+            "properties": {
+                "merchantId": {
+                    "type": "string",
+                    "example": "651d0c19c00ef0652f479d9c"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "interview.testdata2@yopmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "Test@123"
+                },
+                "firstName": {
+                    "type": "string",
+                    "example": "second"
+                },
+                "lastName": {
+                    "type": "string",
+                    "example": "round"
+                },
+                "phoneNumber": {
+                    "type": "number",
+                    "example": "12345678"
+                },
+                "siteUrl": {
+                    "type": "string",
+                    "example": "123"
+                }
+            }
+        },
+        "Validate-Reset-Password": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "example": "inm83hv0rcc7p6tmbypjqfq624c009kb57yh5w0n6m3ietf7gw"
+                }
+            }
+        },
+        "Reset-Password": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "example": "inm83hv0rcc7p6tmbypjqfq624c009kb57yh5w0n6m3ietf7gw"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "darshanpansuriya"
+                }
+            }
+        },
+        "Widget-Upsert": {
+            "type": "object",
+            "properties": {
+                "key": {
+                    "type": "string",
+                    "example": "inm83hv0rcc7p6tmbypjqfq624c009kb57yh5w0n6m3ietf7gw"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "darshanpansuriya"
+                }
+            }
+        },
+        "Track-Claim": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "account.manager@yopmail.com"
+                },
+                "order_number": {
+                    "type": "number",
+                    "example": "123"
+                }
+            }
+        },
+        "Find-Order": {
+            "type": "object",
+            "properties": {
+                "orderId": {
+                    "type": "number",
+                    "example": "345"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "account.manager@yopmail.com"
+                }
+            }
+        },
+        "Find-Datafix": {
+            "type": "object",
+            "properties": {
+                "shop": {
+                    "type": "String",
+                    "example": "323232"
+                },
+                "order": {
+                    "type": "string",
+                    "example": "aaaaaaaa"
+                }
+            }
+        },
+        "Save-Account":{
+            "type": "object",
+            "properties": {
+                "payment_method ": {
+                    "type": "string",
+                    "example": "pm_1OHiGGDcgoMRnDdZUnBThRMJ"
+                }
+            }
+        },
+        "Save-Bank":{
+            "type": "object",
+            "properties": {
+                "bank_token_id": {
+                    "type": "string",
+                    "example": ""
+                }
+            }
+        },
+        "User-Login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string",
+                    "example": "account.manager@yopmail.com"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "Test@1234"
+                }
+            }
+        },
+        "id": {
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        }
+    }
+}
